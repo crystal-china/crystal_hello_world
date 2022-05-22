@@ -1,7 +1,7 @@
 on:
-  release:
-    types:
-      - created
+  push:
+    tags:
+      - "v*.*.*"
 
 jobs:
   build:
@@ -29,12 +29,6 @@ jobs:
         run: |
           shards build --production --release --static --no-debug --link-flags="-s -Wl,-z,relro,-z,now"
           strip ./bin/crystal_hello_world
-      - name: Upload
-        uses: actions/upload-release-asset@v1
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        with:
-          upload_url: ${{ github.event.release.upload_url }}
-          asset_path: ./bin/crystal_hello_world
-          asset_name: crystal_hello_world-${{ github.event.release.tag_name }}-linux-x86_64
-          asset_content_type: binary/octet-stream
+      - name: Release
+        uses: softprops/action-gh-release@v1
+        if: startsWith(github.ref, 'refs/tags/')
