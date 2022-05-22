@@ -1,0 +1,40 @@
+on:
+  release:
+    types:
+      - created
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    container:
+      image: crystallang/crystal:1.4-alpine
+    steps:
+      # - name: Install Crystal
+      #   uses: crystal-lang/install-crystal@v1
+      - name: Cache shards
+        uses: actions/cache@v2
+        with:
+          path: ~/.cache/shards
+          key: ${{ runner.os }}-shards-${{ hashFiles('shard.yml') }}
+          restore-keys: ${{ runner.os }}-shards-
+      - name: Download source
+        uses: actions/checkout@v2
+      - name: Install shards
+        run: shards check || shards install
+      - name: Check formatting
+        run: crystal tool format --check
+      - name: Run tests
+        run: crystal spec
+      - name: release binary
+        run: |
+          shards build --production --release --static --no-debug --link-flags="-s -Wl,-z,relro,-z,now"
+          strip ./bin/crystal_hello_world
+      - name: Upload
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url: ${{ github.event.release.upload_url }}
+          asset_path: ./bin/crystal_hello_world
+          asset_name: crystael_hello_world-${{ github.event.release.tag_name }}-linux-x86_64
+          asset_content_type: binary/octet-stream
