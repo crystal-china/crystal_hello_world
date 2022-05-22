@@ -29,10 +29,10 @@ jobs:
         run: |
           shards build --production --release --static --no-debug --link-flags="-s -Wl,-z,relro,-z,now"
           strip ./bin/crystal_hello_world
+          tar zcf crystal_hello_world.tar.gz bin/crystal_hello_world LICENSE
       - name: Release
         uses: softprops/action-gh-release@v1
         if: startsWith(github.ref, 'refs/tags/')
         with:
           files: |
-            bin/crystal_hello_world
-            LICENSE
+            crystal_hello_world.tar.gz
