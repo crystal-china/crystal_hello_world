@@ -11,6 +11,9 @@ targets:
 dependencies:
   kemal:
     github: kemalcr/kemal
+  baked_file_system:
+    github: schovi/baked_file_system
+    version: 0.10.0
 
 crystal: 1.4.1
 
