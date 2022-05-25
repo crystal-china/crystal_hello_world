@@ -8,6 +8,10 @@ targets:
   crystal_hello_world:
     main: src/crystal_hello_world.cr
 
+dependencies:
+  kemal:
+    github: kemalcr/kemal
+
 crystal: 1.4.1
 
 license: MIT
