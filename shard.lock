@@ -1,12 +1,12 @@
 version: 2.0
 shards:
+  any_hash:
+    git: https://github.com/sija/any_hash.cr.git
+    version: 0.2.5
+
   backtracer:
     git: https://github.com/sija/backtracer.cr.git
     version: 1.2.1
-
-  baked_file_system:
-    git: https://github.com/schovi/baked_file_system.git
-    version: 0.10.0
 
   exception_page:
     git: https://github.com/crystal-loot/exception_page.git
@@ -19,6 +19,10 @@ shards:
   radix:
     git: https://github.com/luislavena/radix.git
     version: 0.4.1
+
+  raven:
+    git: https://github.com/sija/raven.cr.git
+    version: 1.9.2
 
   spec-kemal:
     git: https://github.com/kemalcr/spec-kemal.git

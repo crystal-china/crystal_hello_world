@@ -15,9 +15,8 @@ dependencies:
   spec-kemal:
     github: kemalcr/spec-kemal
     version: 1.0.0
-  baked_file_system:
-    github: schovi/baked_file_system
-    version: 0.10.0
+  raven:
+    github: Sija/raven.cr
 
 crystal: 1.5.0
 
