@@ -1,0 +1,43 @@
+on:
+  push:
+    branches:
+      - master
+      - main
+    tags:
+      - "v*.*.*"
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v2
+    - uses: pguyot/arm-runner-action@v2
+      id: build_image
+      with:
+        base_image: raspios_lite_arm64:2022-04-04
+        commands: >-
+            sudo apt-get install -y
+            automake
+            build-essential
+            git
+            libbsd-dev
+            libedit-dev
+            libevent-dev
+            libgmp-dev
+            libgmpxx4ldbl
+            libpcre3-dev
+            libssl-dev
+            libtool
+            libxml2-dev
+            libyaml-dev
+            lld
+            llvm-11-dev
+            libz-dev &&
+            git clone --depth=1 https://github.com/ivmai/bdwgc.git &&
+            cd bdwgc &&
+            git clone --depth=1 https://github.com/ivmai/libatomic_ops.git &&
+            autoreconf -vif &&
+            ./configure --enable-static --disable-shared &&
+            make && make check && make install &&
+            git clone --branch 1.5.0 --depth 1 https://github.com/crystal-lang/crystal &&
+            cd crystal && make deps
