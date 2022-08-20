@@ -14,9 +14,9 @@ jobs:
     - uses: pguyot/arm-runner-action@v2
       id: build_image
       with:
-        base_image: raspios_lite_arm64:2022-04-04
         commands: >-
-            sudo apt-get install -y
+            apt-get update &&
+            apt-get install -y
             automake
             build-essential
             git
