@@ -5,7 +5,7 @@ authors:
   - Billy.Zheng <vil963@gmail.com>
 
 targets:
-  crystal_hello_world:
+  hello_world:
     main: src/hello_world.cr
 
 dependencies:

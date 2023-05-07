@@ -3,7 +3,7 @@
 /bin/
 /.shards/
 *.dwarf
-/crystal_hello_world
+/helloworld
 /dev/
 /sentry
 *.o
