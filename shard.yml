@@ -6,7 +6,7 @@ authors:
 
 targets:
   crystal_hello_world:
-    main: src/crystal_hello_world.cr
+    main: src/hello_world.cr
 
 dependencies:
   kemal:
