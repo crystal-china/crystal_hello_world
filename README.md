@@ -1,18 +1,11 @@
 # crystal_hello_world
 
-TODO: Write a description here
+A showcase project for following purposes:
 
-## Installation
-
-TODO: Write installation instructions here
-
-## Usage
-
-TODO: Write usage instructions here
-
-## Development
-
-TODO: Write development instructions here
+1. How to write a simple hello world web application use kemal.
+2. How to write Spec.
+3. How to write workflows for Alpine/Linux/MacOS/Windows.
+4. How to create a Makefile for work with Crystal project.
 
 ## Contributing
 
