@@ -1,2 +1,2 @@
 require "spec-kemal"
-require "../src/crystal_hello_world"
+require "../src/hello_world"
