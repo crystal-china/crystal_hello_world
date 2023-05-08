@@ -23,12 +23,11 @@ jobs:
         run: |
           echo "BINARY_NAME=bin/$(cat shard.yml |Select-String -Pattern 'targets:' -Context 1 |%{$_ -replace '> targets:',''}|%{$_ -replace '[\s:]*',''})" >> $Env:GITHUB_ENV
           echo "PKG_ARCH=x86_64" >> $Env:GITHUB_ENV
-          echo "RELEASE_VERSION=v0.0.14" >> $Env:GITHUB_ENV
           echo "PLATFORM=pc-windows-msvc.zip" >> $Env:GITHUB_ENV
           echo "BUILD_ARGS=" >> $Env:GITHUB_ENV
       - name: set asset name
         run: |
-          echo "ASSERT_NAME=${{env.BINARY_NAME}}-${{env.RELEASE_VERSION}}-${{env.PKG_ARCH}}-${{env.PLATFORM}}" >> $Env:GITHUB_ENV
+          echo "ASSERT_NAME=${{env.BINARY_NAME}}-${{github.ref_name}}-${{env.PKG_ARCH}}-${{env.PLATFORM}}" >> $Env:GITHUB_ENV
       - name: release binary
         id: release
         run: |
