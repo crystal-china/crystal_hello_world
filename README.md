@@ -1,11 +1,15 @@
-# crystal_hello_world
+# hello world!
 
 A showcase project for following purposes:
 
-1. How to write a simple hello world web application use kemal.
-2. How to write Spec.
-3. How to write workflows for Alpine/Linux/MacOS/Windows.
-4. How to create a Makefile for work with Crystal project.
+1. How to write a simple hello world web application use kemal, with Spec.
+2. How to write workflows for build and release a Alpine/Linux/MacOS/Windows 
+   binary automatically when user push a git tag.
+3. How to create a Makefile for work with Crystal project.
+
+# TODO
+
+Support build and release binary based on ARM.
 
 ## Contributing
 
