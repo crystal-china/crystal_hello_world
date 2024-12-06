@@ -10,14 +10,9 @@ targets:
 
 dependencies:
   kemal:
-    github: zw963/kemal
-    branch: master
+    github: kemalcr/kemal
   spec-kemal:
     github: kemalcr/spec-kemal
-    version: 1.0.0
-  exception_page:
-    github: crystal-loot/exception_page
-    branch: master
 
 crystal: 1.8.0
 
