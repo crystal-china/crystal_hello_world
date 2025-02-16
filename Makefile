@@ -32,6 +32,8 @@ all: build ## build [default]
 .PHONY: build
 build: $(O) ## Build the application binary
 
+# 如果希望在源码没有被更改的情况下，运行一次之后，下次跳过 build,
+# 那么，名称必须是一个合法的文件 path. make 似乎会自动检测是否有同名文件存在。
 $(O): $(SOURCES) $(LIB_SOURCES) lib bin
 	$(COMPILER) build $(FLAGS) $(CRYSTAL_ENTRY_FILE) -o $(O)
 
