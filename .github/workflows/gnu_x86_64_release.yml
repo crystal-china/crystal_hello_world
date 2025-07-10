@@ -17,6 +17,13 @@ jobs:
       - name: Download source
         uses: actions/checkout@v4
 
+      - name: Spell Check Repo
+        uses: crate-ci/typos@v1.34.0
+        with:
+          files: src/ spec/
+        env:
+          CLICOLOR: 1
+
       - name: Install Crystal
         uses: crystal-lang/install-crystal@v1
 
