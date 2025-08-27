@@ -7,3 +7,5 @@
 /dev/
 /sentry
 *.o
+/code/*
+public/app.css
