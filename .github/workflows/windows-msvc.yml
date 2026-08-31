@@ -8,14 +8,14 @@ jobs:
     runs-on: windows-2022
     steps:
       - name: Cache shards
-        uses: actions/cache@v4
+        uses: actions/cache@v5
         with:
           path: ~/.cache/shards
           key: ${{ runner.os }}-shards-${{ hashFiles('shard.yml') }}
           restore-keys: ${{ runner.os }}-shards-
 
       - name: Download source
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
 
       - name: Install Crystal
         uses: crystal-lang/install-crystal@v1
