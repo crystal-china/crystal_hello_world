@@ -7,3 +7,4 @@
 /dev/
 /sentry
 *.o
+/node_modules
