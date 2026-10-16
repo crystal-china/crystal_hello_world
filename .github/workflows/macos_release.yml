@@ -32,7 +32,7 @@ jobs:
       - name: Collect package information
         run: |
           echo "BINARY_NAME=bin/$(cat shard.yml |grep targets -A1|tail -n1 |sed 's#[ :]##g')" >> $GITHUB_ENV
-          echo "PKG_ARCH=x86_64" >> $GITHUB_ENV
+          echo "PKG_ARCH=$(uname -m)" >> $GITHUB_ENV
           echo "PLATFORM=apple-darwin.tar.gz" >> $GITHUB_ENV
           echo "BUILD_ARGS=" >> $GITHUB_ENV
 
