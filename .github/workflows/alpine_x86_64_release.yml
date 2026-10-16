@@ -9,15 +9,15 @@ jobs:
     container:
       image: crystallang/crystal:latest-alpine
     steps:
+      - name: Download source
+        uses: actions/checkout@v7
+
       - name: Cache shards
         uses: actions/cache@v6
         with:
           path: ~/.cache/shards
           key: ${{ runner.os }}-shards-${{ hashFiles('shard.yml') }}
           restore-keys: ${{ runner.os }}-shards-
-
-      - name: Download source
-        uses: actions/checkout@v7
 
       - name: Check formatting
         run: crystal tool format --check
