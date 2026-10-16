@@ -3,38 +3,58 @@ on:
     tags:
       - "v*.*.*"
 
+permissions:
+  contents: write
+
 jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/cache@v4
-      - uses: pguyot/arm-runner-action@v2
-        id: build_image
+      - name: Set up QEMU
+        run: docker run --rm --privileged multiarch/qemu-user-static --reset -p yes
+
+      - name: Download source
+        uses: actions/checkout@v7
+
+      - name: Cache shards
+        uses: actions/cache@v6
         with:
-          commands: >-
-            apt-get update &&
-            apt-get install -y
-            automake
-            build-essential
-            git
-            libbsd-dev
-            libedit-dev
-            libevent-dev
-            libgmp-dev
-            libgmpxx4ldbl
-            libpcre3-dev
-            libssl-dev
-            libtool
-            libxml2-dev
-            libyaml-dev
-            lld
-            llvm-11-dev
-            libz-dev &&
-            git clone --depth=1 https://github.com/ivmai/bdwgc.git &&
-            cd bdwgc &&
-            git clone --depth=1 https://github.com/ivmai/libatomic_ops.git &&
-            autoreconf -vif &&
-            ./configure --enable-static --disable-shared &&
-            make && make check && make install &&
-            git clone --branch 1.5.0 --depth 1 https://github.com/crystal-lang/crystal &&
-            cd crystal && make deps
+          path: /home/runner/.cache/shards
+          key: ${{ runner.os }}-arm64-shards-${{ hashFiles('shard.yml', 'shard.lock') }}
+          restore-keys: ${{ runner.os }}-arm64-shards-
+
+      - name: Build binary in ARM container
+        run: |
+          docker run --rm --platform linux/arm64 -v "${{ github.workspace }}:/workspace" -w /workspace \
+            -v /home/runner/.cache/shards:/root/.cache/shards \
+            crystallang/crystal:latest-alpine \
+            sh -ec '
+              git config --global --add safe.directory /workspace
+              crystal tool format --check
+              shards check || shards install --without-development
+              shards build --production --progress --no-debug -Dstrict_multi_assign -Dno_number_autocast --static --link-flags="-s -Wl,-z,relro,-z,now"
+            '
+
+      - name: Collect package information
+        run: |
+          echo "BINARY_NAME=bin/$(cat shard.yml |grep targets -A1|tail -n1 |sed 's#[ :]##g')" >> $GITHUB_ENV
+          echo "PKG_ARCH=arm64" >> $GITHUB_ENV
+          echo "PLATFORM=unknown-linux-musl.tar.gz" >> $GITHUB_ENV
+
+      - name: Set asset name
+        run: |
+          asset_basename=$(basename "${{env.BINARY_NAME}}")
+          echo "ASSET_NAME=${asset_basename}-${{github.ref_name}}-${{env.PKG_ARCH}}-${{env.PLATFORM}}" >> $GITHUB_ENV
+
+      - name: Package release asset
+        id: release
+        run: |
+          echo "ASSET_NAME=${{env.ASSET_NAME}}" >> $GITHUB_OUTPUT
+          tar zcvf ${{env.ASSET_NAME}} ${{env.BINARY_NAME}} LICENSE
+
+      - name: Release
+        uses: softprops/action-gh-release@v3
+        if: startsWith(github.ref, 'refs/tags/')
+        with:
+          files: |
+            ${{steps.release.outputs.ASSET_NAME}}
